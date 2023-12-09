@@ -5,13 +5,12 @@ import com.kameleoon.quoteservice.dao.VoteDAO;
 import com.kameleoon.quoteservice.exception.ChangeExistingVoteException;
 import com.kameleoon.quoteservice.model.Quote;
 import com.kameleoon.quoteservice.model.Vote;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.sql.Date;
+import java.sql.SQLException;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -29,7 +28,7 @@ public class VoteServiceTest {
     }
 
     @Test
-    public void should_createUpvote_whenVoteDoesntExistYet() throws NoSuchMethodException, ChangeExistingVoteException {
+    public void should_createUpvote_whenVoteDoesntExistYet() throws NoSuchMethodException, ChangeExistingVoteException, SQLException {
         String quoteId = UUID.randomUUID().toString();
         String userId = UUID.randomUUID().toString();
         Quote quote = new Quote(quoteId, "Some Content", Date.from(Instant.now()), 0, userId);
@@ -42,7 +41,7 @@ public class VoteServiceTest {
     }
 
     @Test
-    public void should_createDownvote_whenVoteDoesntExistYet() throws ChangeExistingVoteException {
+    public void should_createDownvote_whenVoteDoesntExistYet() throws ChangeExistingVoteException, SQLException {
         String quoteId = UUID.randomUUID().toString();
         String userId = UUID.randomUUID().toString();
         Quote quote = new Quote(quoteId, "Some Content", Date.from(Instant.now()), 0, userId);
@@ -55,12 +54,12 @@ public class VoteServiceTest {
     }
 
     @Test(expected = ChangeExistingVoteException.class)
-    public void should_removeVote_whenMakeADownvote_butUpvoteAlreadyExist() throws ChangeExistingVoteException {
+    public void should_removeVote_whenMakeADownvote_butUpvoteAlreadyExist() throws ChangeExistingVoteException, SQLException {
         String quoteId = UUID.randomUUID().toString();
         String userId = UUID.randomUUID().toString();
         String voteId = UUID.randomUUID().toString();
         Quote quote = new Quote(quoteId, "Some Content", Date.from(Instant.now()), 0, userId);
-        Vote vote = new Vote(voteId, true, userId, quoteId);
+        Vote vote = Vote.getBuilder().setId(voteId).setUpvote(true).setUserId(userId).setQuoteId(quoteId).build();
 
         Mockito.when(voteDAO.getVoteByUserIdAndQuoteId(quoteId, userId)).thenReturn(vote);
         Mockito.when(voteDAO.deleteVote(voteId)).thenReturn(true);
@@ -70,12 +69,12 @@ public class VoteServiceTest {
     }
 
     @Test(expected = ChangeExistingVoteException.class)
-    public void should_removeVote_whenMakeAnUpvote_butDownvoteAlreadyExist() throws ChangeExistingVoteException {
+    public void should_removeVote_whenMakeAnUpvote_butDownvoteAlreadyExist() throws ChangeExistingVoteException, SQLException {
         String quoteId = UUID.randomUUID().toString();
         String userId = UUID.randomUUID().toString();
         String voteId = UUID.randomUUID().toString();
         Quote quote = new Quote(quoteId, "Some Content", Date.from(Instant.now()), 0, userId);
-        Vote vote = new Vote(voteId, false, userId, quoteId);
+        Vote vote = Vote.getBuilder().setId(voteId).setUpvote(false).setUserId(userId).setQuoteId(quoteId).build();
 
         Mockito.when(voteDAO.getVoteByUserIdAndQuoteId(quoteId, userId)).thenReturn(vote);
         Mockito.when(voteDAO.deleteVote(voteId)).thenReturn(true);
@@ -85,11 +84,11 @@ public class VoteServiceTest {
     }
 
     @Test(expected = IllegalStateException.class)
-    public void should_returnIllegalStateException_whenMakeAnUpvote_butUpvoteAlreadyExist() throws ChangeExistingVoteException {
+    public void should_returnIllegalStateException_whenMakeAnUpvote_butUpvoteAlreadyExist() throws ChangeExistingVoteException, SQLException {
         String quoteId = UUID.randomUUID().toString();
         String userId = UUID.randomUUID().toString();
         String voteId = UUID.randomUUID().toString();
-        Vote vote = new Vote(voteId, true, userId, quoteId);
+        Vote vote = Vote.getBuilder().setId(voteId).setUpvote(true).setUserId(userId).setQuoteId(quoteId).build();
 
         Mockito.when(voteDAO.getVoteByUserIdAndQuoteId(quoteId, userId)).thenReturn(vote);
 
@@ -97,11 +96,11 @@ public class VoteServiceTest {
     }
 
     @Test(expected = IllegalStateException.class)
-    public void should_returnIllegalStateException_whenMakeADownvote_butDownvoteAlreadyExist() throws ChangeExistingVoteException {
+    public void should_returnIllegalStateException_whenMakeADownvote_butDownvoteAlreadyExist() throws ChangeExistingVoteException, SQLException {
         String quoteId = UUID.randomUUID().toString();
         String userId = UUID.randomUUID().toString();
         String voteId = UUID.randomUUID().toString();
-        Vote vote = new Vote(voteId, false, userId, quoteId);
+        Vote vote = Vote.getBuilder().setId(voteId).setUpvote(false).setUserId(userId).setQuoteId(quoteId).build();
 
         Mockito.when(voteDAO.getVoteByUserIdAndQuoteId(quoteId, userId)).thenReturn(vote);
 

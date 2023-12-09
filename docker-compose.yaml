@@ -1,0 +1,6 @@
+version: '3.7'
+services:
+  qoute-service:
+    image: lilyrubich/quote-service:latest
+    ports:
+      - "8080:8080"

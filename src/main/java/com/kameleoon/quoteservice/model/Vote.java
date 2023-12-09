@@ -18,7 +18,7 @@ public class Vote {
     public static VoteBuilder getBuilder() {
         return new VoteBuilder();
     }
-    
+
     public String getId() {
         return id;
     }
