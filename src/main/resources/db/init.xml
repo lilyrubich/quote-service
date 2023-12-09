@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <changeSet id="tables_init" author="lilyrubich">
+        <!--
+        User Entity
+        -->
+        <createTable tableName="users">
+            <column name="id" type="VARCHAR(40)">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="login" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_date" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <!--
+        Quote Entity
+        -->
+        <createTable tableName="quotes">
+            <column name="id" type="VARCHAR(40)">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="content" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modification_date" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rating" type="INT" defaultValue="0"/>
+            <column name="author_id" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <!--
+        Foreign key for Quote Entity
+        -->
+        <addForeignKeyConstraint baseTableName="quotes" baseColumnNames="author_id" constraintName="fk_user_quote"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id" onDelete="CASCADE"/>
+        <!--
+        Vote Entity
+        -->
+        <createTable tableName="votes" >
+            <column name="id" type="VARCHAR(40)">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="is_upvote" type="boolean"/>
+            <column name="user_id" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quote_id" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <!--
+        Foreign keys for Vote Entity
+        -->
+        <addForeignKeyConstraint baseTableName="votes" baseColumnNames="user_id" constraintName="fk_user_vote"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id" onDelete="CASCADE"/>
+        <addForeignKeyConstraint baseTableName="votes" baseColumnNames="quote_id" constraintName="fk_quote_vote"
+                                 referencedTableName="quotes"
+                                 referencedColumnNames="id" onDelete="CASCADE"/>
+    </changeSet>
+
+
+    <changeSet id="init_test_data" author="lilyrubich">
+        <insert tableName="users">
+            <column name="id" value="5f96341b-d3fb-4f0b-9f9f-d1739dc4acb1" />
+            <column name="login" value="bobby" />
+            <column name="email" value="bobmarley@java.com" />
+            <column name="password" value="123" />
+            <column name="creation_date" value="2022-12-08" />
+        </insert>
+        <insert tableName="users">
+            <column name="id" value="0f33341b-d3fb-4f0b-6d6d-d1739dc4acb1" />
+            <column name="login" value="biggiesmalls" />
+            <column name="email" value="biggie@java.com" />
+            <column name="password" value="123453333" />
+            <column name="creation_date" value="2022-12-08" />
+        </insert>
+        <insert tableName="users">
+            <column name="id" value="0f99551b-d3fb-4f0d-3r3r-d1009dc4acb1" />
+            <column name="login" value="lilian" />
+            <column name="email" value="lilian666@java.com" />
+            <column name="password" value="12345" />
+            <column name="creation_date" value="2022-12-08" />
+        </insert>
+
+
+
+        <insert tableName="quotes">
+            <column name="id" value="5f56791b-d3fb-4f0b-9a4f-d1739dc4acb1" />
+            <column name="content" value="Every man gotta right to decide his own destiny" />
+            <column name="modification_date" value="2023-11-01" />
+            <column name="rating" value="-3" />
+            <column name="author_id" value="0f33341b-d3fb-4f0b-6d6d-d1739dc4acb1" />
+        </insert>
+        <insert tableName="quotes">
+            <column name="id" value="1f56791b-d3fb-0f0b-9a4f-d1739dc4acb1" />
+            <column name="content" value="No more internal power struggle" />
+            <column name="modification_date" value="2023-11-01" />
+            <column name="rating" value="0" />
+            <column name="author_id" value="0f33341b-d3fb-4f0b-6d6d-d1739dc4acb1" />
+        </insert>
+        <insert tableName="quotes">
+            <column name="id" value="1f56744b-d3fb-0f0b-9a4f-d1739dc4acb1" />
+            <column name="content" value="Pockets broke as hell" />
+            <column name="modification_date" value="2023-11-02" />
+            <column name="rating" value="2" />
+            <column name="author_id" value="0f33341b-d3fb-4f0b-6d6d-d1739dc4acb1" />
+        </insert>
+        <insert tableName="quotes">
+            <column name="id" value="1f87144b-d3fb-0f0b-9a4f-d1739dc4acb1" />
+            <column name="content" value="Sometimes I hear death knockin' at my front door" />
+            <column name="modification_date" value="2023-11-02" />
+            <column name="rating" value="2" />
+            <column name="author_id" value="0f33341b-d3fb-4f0b-6d6d-d1739dc4acb1" />
+        </insert>
+
+        <insert tableName="quotes">
+            <column name="id" value="1f87888b-d3fb-0f0b-9a4f-d1739dc4acb1" />
+            <column name="content" value="Umbilical cord's wrapped around my neck" />
+            <column name="modification_date" value="2023-11-03" />
+            <column name="rating" value="0" />
+            <column name="author_id" value="5f96341b-d3fb-4f0b-9f9f-d1739dc4acb1" />
+        </insert>
+        <insert tableName="quotes">
+            <column name="id" value="1f84518b-d3fb-0f0b-9a4f-d1739dc4acb1" />
+            <column name="content" value="Rap was secondary, money was necessary" />
+            <column name="modification_date" value="2023-11-01" />
+            <column name="rating" value="3" />
+            <column name="author_id" value="5f96341b-d3fb-4f0b-9f9f-d1739dc4acb1" />
+        </insert>
+        <insert tableName="quotes">
+            <column name="id" value="1f84518b-d3fb-0f0b-9a4f-d1739dc4lkj1" />
+            <column name="content" value="Time to contemplate, damn, where did I fail?" />
+            <column name="modification_date" value="2023-11-02" />
+            <column name="rating" value="0" />
+            <column name="author_id" value="5f96341b-d3fb-4f0b-9f9f-d1739dc4acb1" />
+        </insert>
+        <insert tableName="quotes">
+            <column name="id" value="1f84518b-p3fb-0f0b-3d3f-d1739dc4lkj1" />
+            <column name="content" value="Ninety-four, now I explore new horizons" />
+            <column name="modification_date" value="2023-11-02" />
+            <column name="rating" value="1" />
+            <column name="author_id" value="0f99551b-d3fb-4f0d-3r3r-d1009dc4acb1" />
+        </insert>
+        <insert tableName="quotes">
+            <column name="id" value="1f84518b-p3fb-0f0b-3d3f-d1739dc4lyy1" />
+            <column name="content" value="Biggie Smalls is the illest, your style is played out" />
+            <column name="modification_date" value="2023-11-02" />
+            <column name="rating" value="3" />
+            <column name="author_id" value="0f99551b-d3fb-4f0d-3r3r-d1009dc4acb1" />
+        </insert>
+        <insert tableName="quotes">
+            <column name="id" value="1f84518b-p3fb-0f0b-3d3f-d1000dc4lyy1" />
+            <column name="content" value="I squeeze gats 'til my clips is empty" />
+            <column name="modification_date" value="2023-11-02" />
+            <column name="rating" value="4" />
+            <column name="author_id" value="0f99551b-d3fb-4f0d-3r3r-d1009dc4acb1" />
+        </insert>
+        <insert tableName="quotes">
+            <column name="id" value="1f84518b-p3pp-0f0b-3d3s-d1000dc4lyy1" />
+            <column name="content" value="I'm going back to Santa Monica" />
+            <column name="modification_date" value="2023-11-02" />
+            <column name="rating" value="5" />
+            <column name="author_id" value="0f99551b-d3fb-4f0d-3r3r-d1009dc4acb1" />
+        </insert>
+        <insert tableName="quotes">
+            <column name="id" value="1f77771b-p3pp-0f0b-3d3s-d1000dc4lyy1" />
+            <column name="content" value="As I sit back and look when I used to be a crook" />
+            <column name="modification_date" value="2023-11-02" />
+            <column name="rating" value="6" />
+            <column name="author_id" value="0f99551b-d3fb-4f0d-3r3r-d1009dc4acb1" />
+        </insert>
+        <insert tableName="quotes">
+            <column name="id" value="1f00518b-p3pp-0f0b-3d3s-d1888dc4lyy1" />
+            <column name="content" value="Biggie Smalls on a higher plane" />
+            <column name="modification_date" value="2023-11-02" />
+            <column name="rating" value="8" />
+            <column name="author_id" value="0f99551b-d3fb-4f0d-3r3r-d1009dc4acb1" />
+        </insert>
+        <insert tableName="quotes">
+            <column name="id" value="9f84518b-p3yp-0f0b-3d3s-d1000dc4lyyo" />
+            <column name="content" value="As I lay down laws like Allen Carpet" />
+            <column name="modification_date" value="2023-11-02" />
+            <column name="rating" value="7" />
+            <column name="author_id" value="0f99551b-d3fb-4f0d-3r3r-d1009dc4acb1" />
+        </insert>
+        <insert tableName="quotes">
+            <column name="id" value="9f84518b-p3tr-0f0b-3d3s-d1000dc4lyyo" />
+            <column name="content" value="True player for real, ask Puff Daddy" />
+            <column name="modification_date" value="2023-11-02" />
+            <column name="rating" value="10" />
+            <column name="author_id" value="0f99551b-d3fb-4f0d-3r3r-d1009dc4acb1" />
+        </insert>
+        <insert tableName="quotes">
+            <column name="id" value="9f84518b-p3tr-0f0b-7a7a-d1000dc4lyyo" />
+            <column name="content" value="Where you at? Flipping jobs, paying car notes?" />
+            <column name="modification_date" value="2023-11-02" />
+            <column name="rating" value="-9" />
+            <column name="author_id" value="0f99551b-d3fb-4f0d-3r3r-d1009dc4acb1" />
+        </insert>
+        <insert tableName="quotes">
+            <column name="id" value="9f84518b-p3tr-0i0b-7a9a-d1000dc1lyyo" />
+            <column name="content" value="I'm not only a client, I'm the player President" />
+            <column name="modification_date" value="2023-11-02" />
+            <column name="rating" value="-10" />
+            <column name="author_id" value="0f99551b-d3fb-4f0d-3r3r-d1009dc4acb1" />
+        </insert>
+
+
+
+        <insert tableName="votes">
+            <column name="id" value="1f84111b-p3fb-0f0b-3d3f-d1000pq4lyy1" />
+            <column name="is_upvote" value="false" />
+            <column name="user_id" value="5f96341b-d3fb-4f0b-9f9f-d1739dc4acb1" />
+            <column name="quote_id" value="5f56791b-d3fb-4f0b-9a4f-d1739dc4acb1" />
+        </insert>
+        <insert tableName="votes">
+            <column name="id" value="1f84111b-p3fb-0f0b-3d3f-d1000dc4lee1" />
+            <column name="is_upvote" value="false" />
+            <column name="user_id" value="0f33341b-d3fb-4f0b-6d6d-d1739dc4acb1" />
+            <column name="quote_id" value="5f56791b-d3fb-4f0b-9a4f-d1739dc4acb1" />
+        </insert>
+        <insert tableName="votes">
+            <column name="id" value="1f84111b-p3fb-0f0b-3d3f-d1000dc4lyy1" />
+            <column name="is_upvote" value="false" />
+            <column name="user_id" value="0f99551b-d3fb-4f0d-3r3r-d1009dc4acb1" />
+            <column name="quote_id" value="5f56791b-d3fb-4f0b-9a4f-d1739dc4acb1" />
+        </insert>
+        <insert tableName="votes">
+            <column name="id" value="1f84111b-p3fb-0f0b-3d3f-d1033dc4lyy1" />
+            <column name="is_upvote" value="true" />
+            <column name="user_id" value="5f96341b-d3fb-4f0b-9f9f-d1739dc4acb1" />
+            <column name="quote_id" value="1f84518b-p3fb-0f0b-3d3f-d1739dc4lyy1" />
+        </insert>
+        <insert tableName="votes">
+            <column name="id" value="1f84111b-p3fb-0f0b-3d3f-d1033tt4lyy1" />
+            <column name="is_upvote" value="true" />
+            <column name="user_id" value="0f33341b-d3fb-4f0b-6d6d-d1739dc4acb1" />
+            <column name="quote_id" value="1f84518b-p3fb-0f0b-3d3f-d1739dc4lyy1" />
+        </insert>
+        <insert tableName="votes">
+            <column name="id" value="1f84222b-p3fb-0f0b-3d3f-d1033dc4lyy1" />
+            <column name="is_upvote" value="true" />
+            <column name="user_id" value="0f99551b-d3fb-4f0d-3r3r-d1009dc4acb1" />
+            <column name="quote_id" value="1f84518b-p3fb-0f0b-3d3f-d1739dc4lyy1" />
+        </insert>
+        <insert tableName="votes">
+            <column name="id" value="1f84222b-p3fb-0f0b-3d3f-d1033dc4loo1" />
+            <column name="is_upvote" value="true" />
+            <column name="user_id" value="5f96341b-d3fb-4f0b-9f9f-d1739dc4acb1" />
+            <column name="quote_id" value="1f84518b-p3fb-0f0b-3d3f-d1739dc4lkj1" />
+        </insert>
+
+        <insert tableName="votes">
+            <column name="id" value="1f85993b-p3fb-0f0b-3d3f-d1000dc4lyy1" />
+            <column name="is_upvote" value="true" />
+            <column name="user_id" value="5f96341b-d3fb-4f0b-9f9f-d1739dc4acb1" />
+            <column name="quote_id" value="1f84518b-d3fb-0f0b-9a4f-d1739dc4acb1" />
+        </insert>
+        <insert tableName="votes">
+            <column name="id" value="1f87771b-p3fl-0f0b-3d3f-d1000dc4lyy1" />
+            <column name="is_upvote" value="true" />
+            <column name="user_id" value="0f33341b-d3fb-4f0b-6d6d-d1739dc4acb1" />
+            <column name="quote_id" value="1f84518b-d3fb-0f0b-9a4f-d1739dc4acb1" />
+        </insert>
+        <insert tableName="votes">
+            <column name="id" value="1f99111b-p3fb-0f0b-3d3f-d1000dc4lyy1" />
+            <column name="is_upvote" value="true" />
+            <column name="user_id" value="0f99551b-d3fb-4f0d-3r3r-d1009dc4acb1" />
+            <column name="quote_id" value="1f84518b-d3fb-0f0b-9a4f-d1739dc4acb1" />
+        </insert>
+        <insert tableName="votes">
+            <column name="id" value="1f87771b-p3fb-0f0b-3d3f-d1000dc4lyy1" />
+            <column name="is_upvote" value="true" />
+            <column name="user_id" value="5f96341b-d3fb-4f0b-9f9f-d1739dc4acb1" />
+            <column name="quote_id" value="1f87144b-d3fb-0f0b-9a4f-d1739dc4acb1" />
+        </insert>
+        <insert tableName="votes">
+            <column name="id" value="1f55511b-p3fb-0f0u-3d3f-d1000dc4lyy1" />
+            <column name="is_upvote" value="true" />
+            <column name="user_id" value="0f33341b-d3fb-4f0b-6d6d-d1739dc4acb1" />
+            <column name="quote_id" value="1f87144b-d3fb-0f0b-9a4f-d1739dc4acb1" />
+        </insert>
+        <insert tableName="votes">
+            <column name="id" value="1f87771b-p3fb-0f0b-3p3f-d1000dc4lyy1" />
+            <column name="is_upvote" value="true" />
+            <column name="user_id" value="0f33341b-d3fb-4f0b-6d6d-d1739dc4acb1" />
+            <column name="quote_id" value="1f56744b-d3fb-0f0b-9a4f-d1739dc4acb1" />
+        </insert>
+        <insert tableName="votes">
+            <column name="id" value="1f55511b-p3fb-0f0u-3d3q-d1000dc4lyy1" />
+            <column name="is_upvote" value="true" />
+            <column name="user_id" value="0f99551b-d3fb-4f0d-3r3r-d1009dc4acb1" />
+            <column name="quote_id" value="1f56744b-d3fb-0f0b-9a4f-d1739dc4acb1" />
+        </insert>
+        <rollback/>
+    </changeSet>
+</databaseChangeLog>
