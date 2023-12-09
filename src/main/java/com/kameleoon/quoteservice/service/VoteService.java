@@ -66,12 +66,13 @@ public class VoteService {
     }
 
     protected Vote createVote(String quoteId, String userId, boolean isUpvote) {
-        Vote vote = new Vote();
         UUID uuid = UUID.randomUUID();
-        vote.setId(uuid.toString());
-        vote.setUpvote(isUpvote);
-        vote.setQuoteId(quoteId);
-        vote.setUserId(userId);
+        Vote vote = Vote.getBuilder()
+                .setId(uuid.toString())
+                .setUpvote(isUpvote)
+                .setQuoteId(quoteId)
+                .setUserId(userId)
+                .build();
 
         voteDAO.createVote(vote);
         return vote;

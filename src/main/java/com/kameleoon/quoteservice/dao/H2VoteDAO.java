@@ -24,12 +24,12 @@ public class H2VoteDAO implements VoteDAO<Vote> {
     }
 
     RowMapper<Vote> voteRowMapper = (rs, rowNum) -> {
-        Vote vote = new Vote();
-        vote.setId(rs.getString("id"));
-        vote.setUpvote(rs.getBoolean("is_upvote"));
-        vote.setUserId(rs.getString("user_id"));
-        vote.setQuoteId(rs.getString("quote_id"));
-        return vote;
+        return Vote.getBuilder()
+                .setId(rs.getString("id"))
+                .setUpvote(rs.getBoolean("is_upvote"))
+                .setQuoteId(rs.getString("quote_id"))
+                .setUserId(rs.getString("user_id"))
+                .build();
     };
 
     @Override
@@ -56,7 +56,7 @@ public class H2VoteDAO implements VoteDAO<Vote> {
     public boolean deleteVote(String id) {
         String sql = "delete from votes where id=?";
         if (jdbcTemplate.update(sql, id) >= 1) {
-            log.info("Vote with id = " + id + "has been removed");
+            log.info("Vote with id = " + id + " has been removed");
             return true;
         } else {
             log.info("Failed to delete vote with id = " + id);
