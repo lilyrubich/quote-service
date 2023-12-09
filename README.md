@@ -13,6 +13,21 @@ A simple Spring boot application that demonstrates the usage of RESTful API usin
 * Swagger
 
 
+## Run the App
+
+1. The Application is running via docker-compose:
+
+```docker-compose up```
+
+2. You can also package the application in the form of a jar file and then run it like so 
+
+```
+mvn package
+java -jar target/quote-service-0.0.1-SNAPSHOT.jar
+```
+
+The server will start on port 8080.
+
 ## Open H2 console
 
 Database details are available in H2 console at the link below
