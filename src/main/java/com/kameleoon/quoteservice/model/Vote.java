@@ -15,9 +15,10 @@ public class Vote {
         this.quoteId = voteBuilder.getQuoteId();
     }
 
-    public static VoteBuilder getBuilder(){
+    public static VoteBuilder getBuilder() {
         return new VoteBuilder();
     }
+    
     public String getId() {
         return id;
     }
